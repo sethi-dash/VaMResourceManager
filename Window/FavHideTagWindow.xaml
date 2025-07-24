@@ -1,0 +1,39 @@
+﻿<Window x:Class="Vrm.Window.FavHideTagWindow"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Title="{Binding Title}" 
+        Width="500"
+        Height="335"
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize"
+        Loaded="Window_Loaded">
+    <StackPanel Margin="10" Orientation="Vertical">
+
+        <TextBlock Text="Favorite" FontWeight="SemiBold"/>
+        <TextBlock Text="{Binding CountFav, StringFormat=Found {0} element(s)}"/>
+        <CheckBox Content="Change?" IsChecked="{Binding ChangeFav}" IsEnabled="{Binding CanEditFav}" x:Name="ch_fav"/>
+        <CheckBox Content="Favorite" IsChecked="{Binding IsFav}" IsEnabled="{Binding IsChecked, ElementName=ch_fav}" Margin="10, 4, 0 ,0"/>
+
+        <TextBlock Text="Hide" FontWeight="SemiBold" Margin="0, 14, 0 ,0"/>
+        <TextBlock Text="{Binding CountHide, StringFormat=Found {0} element(s)}"/>
+        <CheckBox Content="Change?" IsChecked="{Binding ChangeHide}" IsEnabled="{Binding CanEditHide}" x:Name="ch_hide"/>
+        <CheckBox Content="Hide" IsChecked="{Binding IsHide}" IsEnabled="{Binding IsChecked, ElementName=ch_hide}" Margin="10, 4, 0 ,0"/>
+
+        <TextBlock Text="Tag" FontWeight="SemiBold" Margin="0, 14, 0 ,0"/>
+        <TextBlock Text="VaM won't see the changes in the tags until it is restarted." FontWeight="Light" Margin="0, 4, 0 ,0"/>
+        <TextBlock Text="{Binding CountTag, StringFormat=Found {0} element(s)}"/>
+        <CheckBox Content="Change?" IsChecked="{Binding ChangeTag}" IsEnabled="{Binding CanEditTag}" x:Name="ch_tag"/>
+        <StackPanel Orientation="Horizontal" Margin="10, 4, 0 ,0">
+            <TextBlock Text="Tag:" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked, ElementName=ch_tag}" Margin="4, 0, 0 ,0" Width="100" VerticalAlignment="Center"/>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Content="OK" Width="75" IsDefault="True"
+                    Margin="0,0,5,0"
+                    Command="{Binding OkCommand}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Width="75" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

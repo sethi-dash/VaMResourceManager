@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="Vrm.Control.NumericTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="Auto" Width="Auto">
+    <TextBox x:Name="PART_TextBox"
+             Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             PreviewTextInput="TextBox_PreviewTextInput"
+             PreviewKeyDown="TextBox_PreviewKeyDown"
+             PreviewMouseWheel="TextBox_PreviewMouseWheel"
+             MaxLength="4" />
+</UserControl>

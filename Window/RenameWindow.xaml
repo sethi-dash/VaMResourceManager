@@ -1,0 +1,20 @@
+﻿<Window x:Class="Vrm.Window.RenameWindow"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        Title="{Binding Title}" 
+        Width="400"
+        Height="150"
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize"
+        Loaded="Window_Loaded">
+    <StackPanel Margin="10">
+        <TextBlock Text="New name:"/>
+        <TextBox x:Name="NameTextBox" Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" Width="75" IsDefault="True"
+                    IsEnabled="{Binding IsValid}" Margin="0,0,5,0"
+                    Command="{Binding OkCommand}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Width="75" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

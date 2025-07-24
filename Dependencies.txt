@@ -1,0 +1,13 @@
+﻿Third-Party Dependencies
+------------------------
+
+This project uses third-party libraries listed below. Each is governed by its own license:
+
+- Costura.Fody (v6.0.0) — MIT License: https://opensource.org/licenses/MIT
+- Fody (v6.8.2) — MIT License: https://opensource.org/licenses/MIT
+- Microsoft.Xaml.Behaviors.Wpf (v1.1.135) — MIT License: https://opensource.org/licenses/MIT
+- Newtonsoft.Json (v13.0.3) — MIT License: https://opensource.org/licenses/MIT
+- VirtualizingWrapPanel (v2.1.2) — MIT License: https://opensource.org/licenses/MIT
+
+The authors of these libraries retain all rights to their respective code.
+Please refer to their respective licenses for more information.

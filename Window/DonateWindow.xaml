@@ -1,0 +1,39 @@
+﻿<Window x:Class="Vrm.Window.DonateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="Support the Project" Height="450" Width="600">
+    <Grid Margin="10">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+            <TextBlock Text="If you enjoyed the project, feel free to support it 💙" TextAlignment="Center" Margin="0,0,0,20" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                <Image x:Name="qrBitcoin" Width="150" Height="150" Margin="0,0,0,0"/>
+                <StackPanel>
+                    <TextBlock Text="Bitcoin:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="BitcoinAddress" Height="20" Text="bc1q6rynxs54wqyee6fe3wds9z6gn2nhl9ej40w84w" IsReadOnly="True" Margin="0,5,0,5" Width="300"/>
+                        <Button Content="&#x1F5D2;" ToolTip="Copy" Width="20" Height="20" Margin="3 0 0 0" Click="CopyBitcoin_Click"/>
+                    </StackPanel>
+                    <TextBlock x:Name="copiedBtc" Text="Copied" HorizontalAlignment="Right" Visibility="Collapsed" Foreground="Gray"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
+                <Image x:Name="qrEth" Width="150" Height="150" Margin="0,0,0,0"/>
+                <StackPanel>
+                    <TextBlock Text="Ethereum / USDT (ERC-20):"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="EthAddress" Text="0x7ce9c1Da02A5621b74327a01Ae4Ac6FE5Af73E4F" IsReadOnly="True" Margin="0,5,0,5" Width="300" Height="20"/>
+                        <Button Content="&#x1F5D2;" ToolTip="Copy" Width="20" Height="20" Margin="3 0 0 0" Click="CopyEth_Click"/>
+                    </StackPanel>
+                    <TextBlock x:Name="copiedEth" Text="Copied" HorizontalAlignment="Right" Visibility="Collapsed" Foreground="Gray"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

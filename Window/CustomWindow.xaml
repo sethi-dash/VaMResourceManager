@@ -1,0 +1,140 @@
+﻿<Window x:Class="Vrm.Window.CustomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:Vrm.Vm"
+        xmlns:control="clr-namespace:Vrm.Control"
+        Title="{Binding Title}"
+        Height="800" Width="1200"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent">
+
+    <Window.DataContext>
+        <vm:VmMain/>
+    </Window.DataContext>
+
+    <Border Background="White" CornerRadius="6" BorderBrush="Gray" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Grid Grid.Row="0" Background="Transparent" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/> <!-- RefButton -->
+                    <ColumnDefinition Width="*"/>    <!-- Title -->
+                    <ColumnDefinition Width="Auto"/> <!-- Window buttons -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Ref Button -->
+                <ToggleButton Content="References" Style="{StaticResource ModernToggleSwitch}" Height="24" Width="100" Margin="4 4 0 4"
+                              IsChecked="{Binding DataContext.IsReferencesEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="4" HorizontalAlignment="Left">
+
+                    <control:LogicalExpressionTable HorizontalAlignment="Left" x:Name="let"
+                                                    FirstColumnHeader="Items are"
+                                                    EmptyItemsTitle="Categories"
+                                                    Predicates="{Binding DataContext.LaFilterPreds, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                    Visibility="{Binding DataContext.ShowLaFilter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="FilterApplied">
+                                    <b:InvokeCommandAction Command="{Binding DataContext.CmdOnLaFilterApplied, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                           CommandParameter="{Binding ElementName=let}"/>
+                                </b:EventTrigger>
+                            <b:EventTrigger EventName="Loaded">
+                                <b:InvokeCommandAction Command="{Binding DataContext.CmdOnLaFilterLoaded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                       CommandParameter="{Binding ElementName=let}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </control:LogicalExpressionTable>
+                    <control:LogicalExpressionTable HorizontalAlignment="Left" x:Name="letFavHide" Margin="4 0 0 0"
+                                                    FirstColumnHeader="Items are"
+                                                    EmptyItemsTitle="Hide/Fav"
+                                                    Predicates="{Binding DataContext.FavHideFilterPreds, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                    Visibility="{Binding DataContext.ShowFavHideFilter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="FilterApplied">
+                                <b:InvokeCommandAction Command="{Binding DataContext.CmdOnFavHideFilterApplied, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                       CommandParameter="{Binding ElementName=letFavHide}"/>
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="Loaded">
+                                <b:InvokeCommandAction Command="{Binding DataContext.CmdOnFavHideFilterLoaded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                                       CommandParameter="{Binding ElementName=letFavHide}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </control:LogicalExpressionTable>
+                    <control:WatermarkTextBox Text="{Binding CreatorFilter, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowCreatorFilter, Converter={StaticResource BoolToVisibilityConverter}}" Watermark="Creator" Margin="4 0 0 0" Width="80"/>
+                    <control:WatermarkTextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowNameFilter, Converter={StaticResource BoolToVisibilityConverter}}" Watermark="Name" Margin="4 0 0 0" Width="80"/>
+                    <control:WatermarkTextBox Text="{Binding VersionFilter, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowVersionFilter, Converter={StaticResource BoolToVisibilityConverter}}" Watermark="Ver." Margin="4 0 0 0" Width="40"/>
+                    <control:WatermarkTextBox Text="{Binding TagFilter, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowTagFilter, Converter={StaticResource BoolToVisibilityConverter}}" Watermark="Tag" Margin="4 0 0 0" Width="60"/>
+                    <control:Mdp MinWidth="70" Height="24" Margin="4 0 0 0"
+                                 SelectedDates="{Binding DataContext.Dates, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 Mode="{Binding DataContext.DateMode, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 LastN="{Binding DataContext.LastNDays, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 StartCreated="{Binding DataContext.DateStartCreated, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 EndCreated="{Binding DataContext.DateEndCreated, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 StartModified="{Binding DataContext.DateStartModified, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 EndModified="{Binding DataContext.DateEndModified, RelativeSource={RelativeSource AncestorType=Window}}"
+                                 Visibility="{Binding DataContext.ShowDates, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <ContentPresenter Content="{Binding GenderFilter}" Visibility="{Binding DataContext.GenderFilter.Show, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding Grouping}" Visibility="{Binding DataContext.ShowGrouping, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding Sorting}" Visibility="{Binding DataContext.ShowSort, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding CatsVar}" Visibility="{Binding DataContext.ShowVarCats, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding CatsUserData}" Visibility="{Binding DataContext.ShowUserDataCats, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding ExtraTools}" Visibility="{Binding DataContext.ExtraTools.Show, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+                    <ContentPresenter Content="{Binding Selection}" Visibility="{Binding DataContext.ShowSelection, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" Margin="4 0 0 0"/>
+
+                    <ItemsControl ItemsSource="{Binding TabCmds}" Height="26">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+                </StackPanel>
+
+                <!-- Title -->
+                <TextBlock Grid.Column="1" Visibility="Collapsed"
+                           Text="{Binding Title}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="10,0"/>
+
+                <!-- Window buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 6 0">
+                    <Button Width="20" Height="20" Content="?" Click="About_Click" Background="Transparent"/>
+                    <Button Width="20" Height="20" Content="—" Click="Minimize_Click" Background="Transparent" Margin="-1 0 0 0"/>
+                    <Button Width="20" Height="20" Content="▭" Click="Maximize_Click" Background="Transparent" Margin="-1 0 0 0"/>
+                    <Button Width="20" Height="20" Content="✕" Click="Close_Click" Background="Transparent" Margin="-1 0 0 0"/>
+                </StackPanel>
+            </Grid>
+
+            <ContentPresenter Margin="4 0 4 4" Grid.Row="1" Content="{Binding}"/>
+
+            <!-- Resize grips -->
+            <Border x:Name="LeftGrip" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="Transparent" Grid.RowSpan="2"
+                    Width="3" Cursor="SizeWE" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="RightGrip" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" Grid.RowSpan="2"
+                    Width="3" Cursor="SizeWE" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="TopGrip" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="Transparent" Grid.RowSpan="2"
+                    Height="3" Cursor="SizeNS" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="BottomGrip" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="Transparent" Grid.RowSpan="2"
+                    Height="3" Cursor="SizeNS" MouseDown="Resize_MouseDown"/>
+
+            <Border x:Name="BottomRightGrip" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Grid.RowSpan="2"
+                    Width="10" Height="10" Cursor="SizeNWSE" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="BottomLeftGrip" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Grid.RowSpan="2"
+                    Width="10" Height="10" Cursor="SizeNESW" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="TopRightGrip" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Grid.RowSpan="2"
+                    Width="10" Height="10" Cursor="SizeNESW" MouseDown="Resize_MouseDown"/>
+            <Border x:Name="TopLeftGrip" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Grid.RowSpan="2"
+                    Width="10" Height="10" Cursor="SizeNWSE" MouseDown="Resize_MouseDown"/>
+        </Grid>
+    </Border>
+</Window>

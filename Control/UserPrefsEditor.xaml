@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Vrm.Control.UserPrefsEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="10 0 10 10" Orientation="Vertical" VerticalAlignment="Top">
+            <TextBlock Text="{Binding Header}" Margin="0 0 0 10" TextWrapping="Wrap"/>
+
+            <CheckBox IsChecked="{Binding ViewModel.PreloadMorphs, Mode=TwoWay}" Content="Preload Morphs"  Margin="2 2 2 0"/>
+            <CheckBox IsChecked="{Binding ViewModel.PluginsAlwaysEnabled, Mode=TwoWay}" Content="Plugins Always Enabled" Margin="2 2 2 0"/>
+            <CheckBox IsChecked="{Binding ViewModel.PluginsAlwaysDisabled, Mode=TwoWay}" Content="Plugins Always Disabled" Margin="2 2 2 0"/>
+            <CheckBox IsChecked="{Binding ViewModel.IgnoreMissingDependencyErrors, Mode=TwoWay}" Content="Ignore Missing Dependency Errors"  Margin="2 2 2 0"/>
+
+            <CheckBox IsChecked="{Binding ViewModel.ProcessOnlyLatestVars, Mode=TwoWay}" Content="(Process only latest vars)"  Margin="22 22 2 0"/>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="0" Grid.RowSpan="2" Text="{Binding Footer}" Margin="10 0 0 60" VerticalAlignment="Bottom" TextWrapping="Wrap"/>
+
+        <Button Grid.Row="1" 
+                Content="OK"
+                Width="80" 
+                Height="30"
+                Margin="0,10,10,10"
+                HorizontalAlignment="Right"
+                IsEnabled="{Binding IsOkEnabled}"
+                Click="OkButton_Click" />
+    </Grid>
+</UserControl>

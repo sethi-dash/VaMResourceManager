@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Costura.Fody.6.0.0\build\Costura.Fody.props" Condition="Exists('packages\Costura.Fody.6.0.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8B61AB1C-A96F-4E04-9033-8C0DE778519B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Vrm</RootNamespace>
+    <AssemblyName>VaMResourceManager</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>packages\Costura.Fody.6.0.0\lib\netstandard2.0\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.135\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="VirtualizingWrapPanel, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\VirtualizingWrapPanel.2.1.2\lib\net462\VirtualizingWrapPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Cfg\ConfigManager.cs" />
+    <Compile Include="Cfg\SortItemCfg.cs" />
+    <Compile Include="Control\Mdp.xaml.cs">
+      <DependentUpon>Mdp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\NumericTextBox.xaml.cs">
+      <DependentUpon>NumericTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\UserPrefsEditor.xaml.cs">
+      <DependentUpon>UserPrefsEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\WatermarkTextBox.cs" />
+    <Compile Include="Json\ArrayExtractor.cs" />
+    <Compile Include="Json\JsonModifiedParser.cs" />
+    <Compile Include="Json\JsonPrefsEditor.cs" />
+    <Compile Include="Json\UserItemDto.cs" />
+    <Compile Include="Json\VarFileDto.cs" />
+    <Compile Include="Refs\DepsHelper.cs" />
+    <Compile Include="Refs\RefItemDepItem.cs" />
+    <Compile Include="Refs\ResourceDict.cs" />
+    <Compile Include="Cfg\CategoryCfg.cs" />
+    <Compile Include="Util\ScrollToSelectedItemBehavior.cs" />
+    <Compile Include="Util\FilterMode.cs" />
+    <Compile Include="Util\TestValueConverter.cs" />
+    <Compile Include="Util\Texts.cs" />
+    <Compile Include="Util\TreeViewSelectedItemBehavior.cs" />
+    <Compile Include="Util\RefCounterSet.cs" />
+    <Compile Include="Util\StringNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Util\EnumDisplayConverter.cs" />
+    <Compile Include="Util\ListExtensions.cs" />
+    <Compile Include="Util\ListViewDragDropBehavior.cs" />
+    <Compile Include="Util\PathNode.cs" />
+    <Compile Include="Util\UiState.cs" />
+    <Compile Include="Vam\DepsProviderBase.cs" />
+    <Compile Include="Util\ShowTools.cs" />
+    <Compile Include="Vm\VmDepsTree.cs" />
+    <Compile Include="Vm\VmStatTable.cs" />
+    <Compile Include="Vm\VmUserFolders.cs" />
+    <Compile Include="Window\DonateWindow.xaml.cs">
+      <DependentUpon>DonateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\GuideWindow.xaml.cs">
+      <DependentUpon>GuideWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\LicenseWindow.xaml.cs">
+      <DependentUpon>LicenseWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\PathsWindow.xaml.cs">
+      <DependentUpon>PathsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\FavHideTagWindow.xaml.cs">
+      <DependentUpon>FavHideTagWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\TextBoxDialog.xaml.cs">
+      <DependentUpon>TextBoxDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\LogicalExpressionTable.xaml.cs">
+      <DependentUpon>LogicalExpressionTable.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cfg\RefItemCfg.cs" />
+    <Compile Include="Json\Objects\ClipItem.cs" />
+    <Compile Include="Json\Objects\ClothingItem.cs" />
+    <Compile Include="Json\Objects\DepProps.cs" />
+    <Compile Include="Json\Objects\HairItem.cs" />
+    <Compile Include="Util\PredicateBuilder.cs" />
+    <Compile Include="Cfg\Config.cs" />
+    <Compile Include="Control\LazyImage.cs" />
+    <Compile Include="Util\ILogger.cs" />
+    <Compile Include="Util\FileHelper.cs" />
+    <Compile Include="Json\Objects\MorphItem.cs" />
+    <Compile Include="Json\Objects\Plugins.cs" />
+    <Compile Include="Window\CustomWindow.xaml.cs">
+      <DependentUpon>CustomWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util\NullToVisibilityConverter.cs" />
+    <Compile Include="Util\Sorter.cs" />
+    <Compile Include="Util\RefOpsVisibilityConverter.cs" />
+    <Compile Include="Util\Node.cs" />
+    <Compile Include="Vam\FolderType.cs" />
+    <Compile Include="Vam\Folders.cs" />
+    <Compile Include="Vam\SearchOpt.cs" />
+    <Compile Include="Vm\VmCheckedCb.cs" />
+    <Compile Include="Vm\VmActions.cs" />
+    <Compile Include="Vm\VmRefs.cs" />
+    <Compile Include="Vm\VmRefItem.cs" />
+    <Compile Include="Vam\UserItem.cs" />
+    <Compile Include="Util\BindingProxy.cs" />
+    <Compile Include="Util\FileSizeConverter.cs" />
+    <Compile Include="Util\UiHelper.cs" />
+    <Compile Include="Json\JsonTreeBuilder.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Util\BoolToVisibilityConverter.cs" />
+    <Compile Include="Util\AsyncRelayCommand.cs" />
+    <Compile Include="Util\BoolInverterConverter.cs" />
+    <Compile Include="Util\RelayCommand.cs" />
+    <Compile Include="Json\SafeJsonLoader.cs" />
+    <Compile Include="Vam\VarFile.cs" />
+    <Compile Include="Json\VarMeta.cs" />
+    <Compile Include="Vam\VarName.cs" />
+    <Compile Include="Vam\KeyCreatorAndName.cs" />
+    <Compile Include="Vam\Ext.cs" />
+    <Compile Include="Vm\VmFileInfos.cs" />
+    <Compile Include="Vm\VmElementBase.cs" />
+    <Compile Include="Vm\VmBase.cs" />
+    <Compile Include="Vm\VmElements.cs" />
+    <Compile Include="Vm\VmTextRaw.cs" />
+    <Compile Include="Vm\VmMetaRaw.cs" />
+    <Compile Include="Vm\VmJsonTree.cs" />
+    <Compile Include="Vm\VmToolLogger.cs" />
+    <Compile Include="Vm\VmImages.cs" />
+    <Compile Include="Vm\VmPropertyTabs.cs" />
+    <Compile Include="Vm\VmTextElement.cs" />
+    <Compile Include="Vm\VmTexts.cs" />
+    <Compile Include="Vm\VmCmdBtn.cs" />
+    <Compile Include="Vm\VmImageElement.cs" />
+    <Compile Include="Vm\VmMain.cs" />
+    <Compile Include="Vm\VmProgress.cs" />
+    <Compile Include="Vm\VmToolUserData.cs" />
+    <Compile Include="Vm\VmToolVar.cs" />
+    <Compile Include="Vm\VmToolVam.cs" />
+    <Compile Include="Window\RenameWindow.xaml.cs">
+      <DependentUpon>RenameWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Control\Mdp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\LogicalExpressionTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Control\NumericTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\UserPrefsEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\WatermarkTextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window\CustomWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Window\DonateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\GuideWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window\LicenseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\PathsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\FavHideTagWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window\TextBoxDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\RenameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="no_image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Dependencies.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Guide.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="0x7ce9c1Da02A5621b74327a01Ae4Ac6FE5Af73E4F.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bc1q6rynxs54wqyee6fe3wds9z6gn2nhl9ej40w84w.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\Fody.6.8.2\build\Fody.targets" Condition="Exists('packages\Fody.6.8.2\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Fody.6.8.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.6.8.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('packages\Costura.Fody.6.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.0.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('packages\Costura.Fody.6.0.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.0.0\build\Costura.Fody.targets'))" />
+  </Target>
+  <Import Project="packages\Costura.Fody.6.0.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.6.0.0\build\Costura.Fody.targets')" />
+</Project>

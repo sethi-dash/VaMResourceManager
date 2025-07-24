@@ -1,0 +1,105 @@
+﻿VaM Resource Manager User Guide
+
+The core idea is to load only what you need into VaM. Instead of deleting unnecessary VARs or disabling morph preloading (though this is supported), the goal is to work with the minimal data set required. VaM Resource Manager is a standalone WPF application that runs before launching VaM. It serves as an alternative resource browser and provides several tools for managing content. For brevity, we’ll refer to VaM Resource Manager as VRM throughout this guide.
+
+VRM presents the most commonly used resources in a visual and intuitive format, allowing you to decide what needs to be loaded into VaM and what can be excluded. All items in VRM fall into three main categories:
+1. Loaded – Items that will be loaded into VaM.
+2. Archived – Items that are viewable in VRM but not loaded into VaM.
+3. Referenced – Items that the user has explicitly referenced.
+
+An item can be either Loaded or Archived at any given time, and may also be marked as Referenced.
+
+Items in VRM are divided into two types for convenience:
+1. VAR – The contents of .var files are analyzed, and most items are displayed as preview images. The .var files themselves are never modified.
+2. UserItem – These are VaM resources that can be previewed as images, along with some useful files such as media files or .uaip files.
+
+'var' tab:
+This tab shows a list of all .var files and their contents only.
+It includes "Browsing Mode," which displays content from the selected .var file only.
+
+'user data' tab:
+This tab displays all content you’ve created or, more generally, content loaded into VaM that is not part of a .var file.
+
+VaM displays both VAR content and user data in a single list.
+VRM separates them into two distinct tabs for clarity.
+Please remember to search for content in both tabs.
+
+VRM also supports References, which are managed in the "References" section. A Reference is simply a named list of VARs or UserItems. A Reference can be toggled on or off. Whether an item is considered Referenced depends on the state of the Reference.
+
+Two final tabs remain: 'vam' and 'log'.
+The log tab is self-explanatory, while the VaM tab contains settings, commands, and statistics related to VaM as a whole.
+
+Please note that each top-level tab has its own set of commands and filters.
+It is recommended to review them to better understand their functionality.
+
+Basic Workflow
+
+1. Identify the content you want to load into VaM (using visual browsing and filters).
+2. Create a Reference for the selected items (they will be marked as Referenced).
+3. Synchronize Loaded and Archived: VRM will move all Referenced items (and their dependencies) into Loaded. All others will be moved to Archived.
+
+
+FAQ
+
+How does VRM detect content?
+- VRM scans your file system on startup to detect content. This scan runs automatically, and results are cached for faster future loads. The initial launch may take some time.
+
+Where does the scan look?
+- VRM scans standard VaM directories, and you can optionally add custom subdirectories under the VaM root folder if your scenes reference content stored there. On first run, you’ll need to specify the VaM root folder and the Archived folder.
+
+How does synchronization of References work?
+- When you initiate synchronization, VRM moves files between Loaded and Archived based on your active References.
+
+What gets moved to Loaded?
+- VRM identifies all dependencies of the content referenced by active References and processes them accordingly.
+- If a file is referenced by both an active and inactive Reference, the active Reference takes precedence. The item and all its dependencies will be placed into Loaded.
+
+What gets moved to Archived?
+- Items not referenced by any active Reference are moved to the Archived folder during synchronization.
+- Only items explicitly listed in the VRM interface are affected—VRM does not move or modify files it does not recognize.
+- After synchronization, a rescan is automatically triggered to refresh the interface.
+- If an inactive Reference is found to be a subset of an active one, it will be automatically reactivated.
+
+How can I search for content?
+- VRM includes basic filtering options (by date, size, version, etc.).
+- Items with thumbnails are displayed visually.
+- Sorting and grouping are supported.
+- VaM features such as favorites, hidden items, and tags are also supported.
+
+Can I undo everything?
+- Yes. Use "Restore" in the References section and "Clear" in the 'vam' tab.
+- This will move all files back to VaM's main directories and clear all VRM caches.
+
+How should I choose the Archived folder?
+- Ideally, choose a location on the same physical drive as VaM. This improves synchronization speed.
+
+How to efficiently download new VARs?
+- Many VARs depend on the same commonly used packages. To avoid downloading duplicates, ensure those packages are already in Loaded.
+- Before downloading new VARs, perform a Restore in the References section.
+- After downloading, create or update References for the VARs you want to keep and then run synchronization.
+
+What do the checkmarks in the References tab mean?
+- A checkmark next to a Reference means that all its files and dependencies are currently in Loaded.
+- Do not move files manually between Loaded and Archived folders—this will break References.
+- However, if this happens, the Check command will alert you.
+
+Do VRM items have properties?
+- Yes. Select an item and inspect the Properties panel.
+- You can find useful information there, such as which files the item depends on, or which other items depend on it.
+
+ADD What does "(w/o presets)" mean in some tab names?
+- It means that clothing or hairstyles are shown the same way VaM displays them.
+- Hide and Tag actions make the most sense for items in these tabs.
+- Otherwise, all items including presets are shown, which is convenient for quick visual browsing.
+
+How to improve performance?
+- The "Loaded" and "Archive" folders should be located on the same physical drive — this speeds up file transfers between them.
+- It is also recommended to place the "Cache" folder on a separate physical drive from "Loaded"/"Archive".
+- Additionally, add antivirus exceptions — at least for the cache folder.
+
+Is this paid software?
+- No. VRM is open-source software and completely free to use.
+- There is only one version, and it is fully functional.
+
+What should I do if I find a bug?
+- Go to the project page https://github.com/sethi-dash/VamResourceManager and create an issue describing the steps to reproduce it.
