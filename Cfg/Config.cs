@@ -25,6 +25,7 @@ namespace Vrm.Cfg
         public HashSet<string> UserFolders { get; set; } = new HashSet<string>();
         public List<CategoryCfg> VarTabs { get; set; } = new List<CategoryCfg>();
         public List<CategoryCfg> UserDataTabs { get; set; } = new List<CategoryCfg>();
+
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public List<SortItemCfg> Sort { get; set; } = new List<SortItemCfg>(){ new SortItemCfg(Sorter.Modified, false)};
 
