@@ -52,7 +52,7 @@ jobs:
     - name: Create ZIP from build output
       run: |
         mkdir out
-        copy .\Release\VaMResourceManager.exe out\
+        copy .\bin\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
 
     - name: GitHub Release
