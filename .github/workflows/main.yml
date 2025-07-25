@@ -1,0 +1,11 @@
+name: Test Manual Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Say Hello
+        run: echo Hello from Windows runner!
