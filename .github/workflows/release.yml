@@ -63,7 +63,6 @@ jobs:
 
     - name: Copy EXE to out folder
       run: |
-        mkdir out
         copy .\bin\Release\VaMResourceManager.exe out\
 
     - name: GitHub Release
