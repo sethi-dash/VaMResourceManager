@@ -28,13 +28,19 @@ jobs:
     - name: Build with MSBuild
       run: msbuild VaMResourceManager.csproj /p:Configuration=Release
       
-    - name: Show build output folder
-      run: dir VaMResourceManager\bin\Release
+    - name: Show full project tree after build
+      shell: pwsh
+      run: |
+        Write-Host "`n📁 Full project tree:"
+        Get-ChildItem -Recurse -Force | ForEach-Object {
+          $depth = ($_.FullName -replace [regex]::Escape((Get-Location).Path), "").Split([IO.Path]::DirectorySeparatorChar).Count - 1
+          ('  ' * $depth) + $_.Name
+        }
       
     - name: Create ZIP from build output
       run: |
         mkdir out
-        copy VaMResourceManager\bin\Release\VaMResourceManager.exe out\
+        copy VaMResourceManager\VaMResourceManager\bin\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
 
     - name: GitHub Release
