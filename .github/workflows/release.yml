@@ -54,6 +54,10 @@ jobs:
         }
         Write-Host "`n📂 Project tree:"
         Show-Tree -Path '.' -Level 0
+
+    - name: Copy EXE to output directory
+      run: |
+        copy .\bin\Release\VaMResourceManager.exe VaMResourceManager.exe
       
     - name: Create ZIP from build output
       run: |
