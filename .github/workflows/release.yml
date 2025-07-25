@@ -31,16 +31,28 @@ jobs:
     - name: Show full project tree after build
       shell: pwsh
       run: |
-        Write-Host "`n📁 Full project tree:"
-        Get-ChildItem -Recurse -Force | ForEach-Object {
-          $depth = ($_.FullName -replace [regex]::Escape((Get-Location).Path), "").Split([IO.Path]::DirectorySeparatorChar).Count - 1
-          ('  ' * $depth) + $_.Name
+        function Show-Tree {
+          param(
+            [string]$Path = '.',
+            [int]$Level = 0
+          )
+          Get-ChildItem -LiteralPath $Path -Force | Sort-Object -Property PSIsContainer, Name | ForEach-Object {
+            $indent = '  ' * $Level
+            if ($_.PSIsContainer) {
+              Write-Host "$indent📁 $($_.Name)"
+              Show-Tree -Path $_.FullName -Level ($Level + 1)
+            } else {
+              Write-Host "$indent📄 $($_.Name)"
+            }
+          }
         }
+        Write-Host "`n📂 Project tree:"
+        Show-Tree -Path '.' -Level 0
       
     - name: Create ZIP from build output
       run: |
         mkdir out
-        copy Release\VaMResourceManager.exe out\
+        copy .\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
 
     - name: GitHub Release
