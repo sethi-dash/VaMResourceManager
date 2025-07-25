@@ -101,6 +101,7 @@
     <Compile Include="Cfg\CategoryCfg.cs" />
     <Compile Include="Util\ScrollToSelectedItemBehavior.cs" />
     <Compile Include="Util\FilterMode.cs" />
+    <Compile Include="Util\TaskHelper.cs" />
     <Compile Include="Util\TestValueConverter.cs" />
     <Compile Include="Util\Texts.cs" />
     <Compile Include="Util\TreeViewSelectedItemBehavior.cs" />

@@ -22,7 +22,7 @@ namespace Vrm.Control
 
         private static void OnSourcePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LazyImage)d).TryLoad();
+            ((LazyImage)d).TryLoad().NoWarning();
         }
 
         private bool _loading = false;
@@ -75,8 +75,8 @@ namespace Vrm.Control
 
         public LazyImage()
         {
-            this.Loaded += (s, e) => TryLoad();
-            this.IsVisibleChanged += (s, e) => TryLoad();
+            this.Loaded += (s, e) => TryLoad().NoWarning();
+            this.IsVisibleChanged += (s, e) => TryLoad().NoWarning();
         }
     }
 

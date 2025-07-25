@@ -119,9 +119,9 @@ namespace Vrm.Util
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private bool SetField<TU>(ref TU field, TU value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<TU>.Default.Equals(field, value)) return false;
             field = value;
             OnPropertyChanged(propertyName);
             return true;

@@ -260,7 +260,7 @@ namespace Vrm.Vm
 
             Task.Run(CheckVamProcess);
 
-            DtLoadedCmd = new RelayCommand(async _ =>
+            DtLoadedCmd = new RelayCommand(_ =>
             {
                 if (!_started)
                 {
@@ -368,7 +368,7 @@ namespace Vrm.Vm
                 }
             }, ()=> ImagesInCache > 0);
 
-            CmdClear = new AsyncRelayCommand(async () =>
+            CmdClear = new AsyncRelayCommand(() =>
             {
                 _ctsScan = new CancellationTokenSource();
                 try
@@ -386,6 +386,7 @@ namespace Vrm.Vm
                     try { _ctsScan?.Dispose(); }catch{/**/}
                     _ctsScan = null;
                 }
+                return Task.CompletedTask;
             }, ()=> VarCount > 0);
 
             CmdScan = new AsyncRelayCommand(async () =>
