@@ -71,7 +71,8 @@ jobs:
         name: ${{ github.event.inputs.tag_name || github.ref_name }}
         body: 'Automatic release'
         files: |
-          VaMResourceManager.zip
           VaMResourceManager.exe
+        # VaMResourceManager.zip 
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
