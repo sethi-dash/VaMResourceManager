@@ -16,6 +16,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Check actor is owner
+      if: ${{ github.actor != 'sethi-dash' }}
+      run: |
+        echo "You are not authorized to run this workflow."
+        exit 1
+    
     - name: Checkout repository
       uses: actions/checkout@v4
 
