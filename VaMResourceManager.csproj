@@ -283,6 +283,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="release.yml" />
+    <None Include="test.yml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
