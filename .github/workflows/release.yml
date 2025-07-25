@@ -54,16 +54,17 @@ jobs:
         }
         Write-Host "`n📂 Project tree:"
         Show-Tree -Path '.' -Level 0
-
-    - name: Copy EXE to output directory
-      run: |
-        copy .\bin\Release\VaMResourceManager.exe VaMResourceManager.exe
-      
+        
     - name: Create ZIP from build output
       run: |
         mkdir out
         copy .\bin\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
+
+    - name: Copy EXE to out folder
+      run: |
+        mkdir out
+        copy .\bin\Release\VaMResourceManager.exe out\
 
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
