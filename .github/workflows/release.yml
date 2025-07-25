@@ -61,6 +61,9 @@ jobs:
         copy .\bin\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
 
+    - name: Copy EXE to root for release
+      run: copy .\bin\Release\VaMResourceManager.exe .\
+
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
       with:
