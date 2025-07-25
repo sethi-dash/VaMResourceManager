@@ -61,16 +61,14 @@ jobs:
         copy .\bin\Release\VaMResourceManager.exe out\
         powershell Compress-Archive -Path out\* -DestinationPath VaMResourceManager.zip
 
-    - name: Copy EXE to out folder
-      run: |
-        copy .\bin\Release\VaMResourceManager.exe out\
-
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
         name: ${{ github.event.inputs.tag_name || github.ref_name }}
         body: 'Automatic release'
-        files: VaMResourceManager.zip
+        files: |
+          VaMResourceManager.zip
+          VaMResourceManager.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
