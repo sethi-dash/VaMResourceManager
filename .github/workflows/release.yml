@@ -27,7 +27,10 @@ jobs:
 
     - name: Build with MSBuild
       run: msbuild VaMResourceManager.csproj /p:Configuration=Release
-
+      
+    - name: Show build output folder
+      run: dir VaMResourceManager\bin\Release
+      
     - name: Create ZIP from build output
       run: |
         mkdir out
