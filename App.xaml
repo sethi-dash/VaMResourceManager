@@ -716,6 +716,7 @@
                           ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <b:Interaction.Behaviors>
                         <util:ScrollToSelectedBehavior InvokeScroll="{Binding InvokeScroll, Mode=TwoWay}" />
+                        <util:UpdateLayoutBehavior Invoke="{Binding InvokeUpdateLayout, Mode=TwoWay}"/>
                     </b:Interaction.Behaviors>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -907,10 +908,11 @@
                     <TextBlock Text="Var:" Margin="14,-1,0,0" VerticalAlignment="Center" Visibility="{Binding BrowsingMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <TextBlock Text="{Binding BrowsedVar, TargetNullValue=none}" Margin="4,-1,0,0" VerticalAlignment="Center" Visibility="{Binding BrowsingMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 4 0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 4 0"
+                                Visibility="{Binding IsImgSizeSliderVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="Image size:"  Margin="0 0 4 0"/>
                         <Slider Width="130" Minimum="50" Maximum="512" TickFrequency="1" IsSnapToTickEnabled="True"
-                                Value="{Binding Path=ImgSize, Mode=TwoWay, Source={x:Static util:UIState.Instance}}"
+                                Value="{Binding Path=ImgSize, Mode=TwoWay}"
                                 ToolTip="{Binding Path=Value, RelativeSource={RelativeSource Mode=Self}}"/>
                     </StackPanel>
                 </DockPanel>
@@ -949,10 +951,11 @@
                     <TextBlock Text="{Binding Count}" VerticalAlignment="Center"/>
                     <Border BorderThickness="0" x:Name="marginFixer" Width="0" Height="20" Margin="14, 0 ,0 ,0"/>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 4 0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 4 0"
+                                Visibility="{Binding IsImgSizeSliderVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="Image size:"  Margin="0 0 4 0"/>
                         <Slider Width="130" Minimum="50" Maximum="512" TickFrequency="1" IsSnapToTickEnabled="True"
-                                Value="{Binding Path=ImgSize, Mode=TwoWay, Source={x:Static util:UIState.Instance}}"
+                                Value="{Binding Path=ImgSize, Mode=TwoWay}"
                                 ToolTip="{Binding Path=Value, RelativeSource={RelativeSource Mode=Self}}"/>
                     </StackPanel>
                 </DockPanel>

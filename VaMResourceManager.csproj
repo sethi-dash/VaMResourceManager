@@ -99,6 +99,7 @@
     <Compile Include="Refs\RefItemDepItem.cs" />
     <Compile Include="Refs\ResourceDict.cs" />
     <Compile Include="Cfg\CategoryCfg.cs" />
+    <Compile Include="Util\UpdateLayoutBehavior.cs" />
     <Compile Include="Util\ScrollToSelectedItemBehavior.cs" />
     <Compile Include="Util\FilterMode.cs" />
     <Compile Include="Util\TaskHelper.cs" />

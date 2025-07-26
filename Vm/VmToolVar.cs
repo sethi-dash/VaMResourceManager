@@ -50,6 +50,37 @@ namespace Vrm.Vm
             }
         }
 
+        #region ImgSize
+
+        private bool _isImgSizeSliderVisible;
+        public bool IsImgSizeSliderVisible
+        {
+            get => _isImgSizeSliderVisible;
+            set => SetField(ref _isImgSizeSliderVisible, value);
+        }
+
+        private double _imgSize = Settings.Config.ImageSize;
+        public double ImgSize
+        {
+            get => _imgSize;
+            set
+            {
+                if (Math.Abs(_imgSize - value) > double.Epsilon)
+                {
+                    _imgSize = value;
+                    OnPropertyChanged(nameof(ImgSize));
+
+                    Settings.Config.ImageSize = value;
+                    UIState.Instance.ImgSize = value;
+
+                    if (SelectedTab is VmImages vi)
+                        vi.InvokeUpdateLayout = true;
+                }
+            }
+        }
+
+        #endregion
+
         #region init
 
         public VmToolVar()
@@ -149,6 +180,7 @@ namespace Vrm.Vm
 
             UpdateName();
             SelectedTab?.RequestScroll();
+            IsImgSizeSliderVisible = SelectedTab is VmImages;
         }
 
         public override IEnumerable<VmCmdBtn> GetCmds()

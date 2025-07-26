@@ -66,6 +66,13 @@ namespace Vrm.Vm
             InvokeScroll = true;
         }
 
+        private bool _invokeUpdateLayout;
+        public bool InvokeUpdateLayout
+        {
+            get => _invokeUpdateLayout;
+            set =>  SetField(ref _invokeUpdateLayout, value);
+        }
+
         protected virtual void UpdateStatus() {}
 
         #region event handlers
