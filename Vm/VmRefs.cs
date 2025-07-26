@@ -172,15 +172,19 @@ namespace Vrm.Vm
             CmdRename = new RelayCommand(x =>
             {
                 var @ref = (VmRefItem)x;
+                var prevName = @ref.Name;
                 var w = new RenameWindow(@ref.Name, Items.Select(x1 => x1.Name)){Owner = UiHelper.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
                 if (w.ShowDialog() == true)
                 {
                     @ref.Name = w.NewName;
+                    Synced.Remove(prevName);
+                    Synced.Add(@ref.Name);
                     Save();
+                    SaveSyncList();
                 }
             }, x =>
             {
-                return x is VmRefItem && !IsSyncPlanned;
+                return x is VmRefItem;// && !IsSyncPlanned;
             });
 
             CmdBeginEdit = new RelayCommand(x =>
