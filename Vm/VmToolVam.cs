@@ -404,7 +404,9 @@ namespace Vrm.Vm
                     var rdLoaded = new ResourceDict();
                     stopwatch.Start();
                     var varBag = await ReadVars(_ctsScan.Token);
-                    var duplicates = FindDuplicatesOutsideAddonPackages(varBag).ToList();
+                    var duplicatesLoaded = FindDuplicatesOutsideAddonPackages(varBag.Where(x=>!x.IsInArchive)).ToList();
+                    var duplicatesArchived = FindDuplicatesOutsideAddonPackages(varBag.Where(x=>x.IsInArchive)).ToList();
+                    var duplicates = duplicatesLoaded.Concat(duplicatesArchived).ToList();
                     if (duplicates.Any())
                     {
                         w.Close();
@@ -797,17 +799,21 @@ namespace Vrm.Vm
                             FileHelper.MoveToOldAddonPackages(item.Info.FullName, item.IsInArchive);
                         dupsFixed = true;
                     }
-                    catch { /**/ }
+                    catch (Exception ex)
+                    {
+                        Settings.Logger.LogMsg(ex.Message);
+                    }
                     finally
                     {
                         w.Close();
                     }
 
                 }
-                TextBoxDialog.ShowDialog($"Cleanup result", $"{duplicates.Count} file(s) were moved");
             }
-            if(!dupsFixed)
-                TextBoxDialog.ShowDialog($"Scanning was canceled.", "A scan must be performed first for the program to work.");
+            if(dupsFixed)
+                TextBoxDialog.ShowDialog($"Cleanup result", $"{duplicates.Count} file(s) were moved");
+            else
+                TextBoxDialog.ShowDialog($"Not all files were moved.", "Scanning was canceled.");
             return dupsFixed;
         }
 

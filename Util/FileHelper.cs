@@ -713,7 +713,10 @@ namespace Vrm.Util
             if (!Directory.Exists(newDir))
                 Directory.CreateDirectory(newDir);
 
-            File.Move(fullFilePath, newFullPath);
+            if(File.Exists(newFullPath))
+                FileDelete(fullFilePath);
+            else
+                File.Move(fullFilePath, newFullPath);
         }
 
         public static void EnsureDirectoryStructureExists(string fullFilePath)
