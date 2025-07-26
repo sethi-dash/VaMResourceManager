@@ -1,16 +1,13 @@
 # VaM Resource Manager
 
-**Author:** sethi_dash  
-**License:** GNU General Public License v3.0  
-
----
-
 ## Overview
 
 **VaM Resource Manager (VRM)** is a fast, standalone WPF-based resource browser and management tool for [Virt-A-Mate (VaM)](https://www.patreon.com/meshedvr).  
 It helps optimize loading times and improve workflow by allowing you to control exactly which resources get loaded into VaM.
 
 VRM does **not** modify `.var` files — it only moves or references them to reduce clutter and speed up startup and browsing.
+
+<img width="2385" height="1331" alt="tab_vam" src="https://github.com/user-attachments/assets/41936d5b-2d66-4674-808e-1cd011ff58d9" />
 
 ---
 
@@ -59,7 +56,7 @@ Each tab includes its own set of filters and actions.
 
 This project is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html).  
 
-## Third-party modules used
+### Third-party modules used
 
 This project uses the following third-party components:
 - Costura.Fody (v6.0.0) — MIT License: https://opensource.org/licenses/MIT
@@ -71,7 +68,9 @@ This project uses the following third-party components:
 The authors of these libraries retain all rights to their respective code.
 Please refer to their respective licenses for more information.
 
+---
+
 ## Contact
 
 GitHub project: [https://github.com/sethi-dash/VamResourceManager](https://github.com/sethi-dash/VamResourceManager)  
-Created by **sethi_dash@outlook.com**
+Created by: **sethi_dash@outlook.com**
