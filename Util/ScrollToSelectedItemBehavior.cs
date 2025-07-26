@@ -32,8 +32,12 @@ namespace Vrm.Util
             {
                 var behavior = (ScrollToSelectedBehavior)d;
                 behavior.ScrollToSelected();
-                // Resetting the flag for re-invocation
-                behavior.InvokeScroll = false;
+
+                UiHelper.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    // Resetting the flag for re-invocation
+                    d.SetValue(InvokeScrollProperty, false);  
+                }), DispatcherPriority.ApplicationIdle);
             }
         }
 

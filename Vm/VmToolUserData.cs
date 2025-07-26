@@ -92,6 +92,7 @@ namespace Vrm.Vm
             catch{/**/}
 
             UpdateName();
+            SelectedTab?.RequestScroll();
             IsImgSizeSliderVisible = SelectedTab is VmImages;
         }
 
