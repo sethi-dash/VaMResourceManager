@@ -13,6 +13,13 @@ namespace Vrm.Json
         public const string str_preloadMorphs = "preloadMorphs";
         private const string str_customOptions = "customOptions";
         public const string str_userTags = "userTags";
+        private JArray _components = new JArray
+        {
+            new JObject { ["type"] = "DAZMesh" },
+            new JObject { ["type"] = "DAZSkinWrap" },
+            new JObject { ["type"] = "DAZSkinWrapMaterialOptions" },
+            new JObject { ["type"] = "MVRPluginManager" },
+        };
 
         private JObject _root;
 
@@ -20,6 +27,69 @@ namespace Vrm.Json
         {
             _root = string.IsNullOrWhiteSpace(json) ? new JObject() : JObject.Parse(json);
         }
+
+        public void AddComponentsToRoot()
+        {
+            _root["components"] = _components;
+        }
+
+        public void AddInComponents_MVRPluginManager()
+        {
+            var components = _root["components"] as JArray;
+            var newComponent = new JObject
+            {
+                ["type"] = "MVRPluginManager"
+            };
+            components.Add(newComponent);
+        }
+
+        public void RemoveFromRoot_setUnlistedParamsToDefault()
+        {
+            _root.Remove("setUnlistedParamsToDefault");
+        }
+
+        public bool AddToStorables_ClothingPluginManager(string name, out string message)
+        {
+            message = null;
+            JArray storables = _root["storables"] as JArray;
+
+            if (storables != null && storables.Count > 0)
+            {
+                string id = storables[0]?["id"]?.ToString();
+
+                if (!string.IsNullOrEmpty(id) && id.Contains(":"))
+                {
+                    string prefix = id.Split(':')[0];
+
+                    // Create new storable object
+                    JObject newStorable = new JObject
+                    {
+                        ["id"] = $"{prefix}:{name}",
+                        ["plugins"] = new JObject
+                        {
+                            ["plugin#0"] = "Stopper.ClothingPluginManager.7:/Custom/Scripts/Stopper/ClothingPluginManager/ClothingPluginManager.cs"
+                            //,["plugin#1"] = "Regguise.CustomShaderLoader.1:/Custom/Scripts/Regguise/CustomShaderLoader/CustomShaderLoader.cslist"
+                        }
+                    };
+
+                    // Insert as the first item
+                    storables.Insert(0, newStorable);
+
+                    return true;
+                }
+                else
+                {
+                    message = "ID is missing or not in expected format.";
+                    return false;
+                }
+            }
+            else
+            {
+                message = "No 'storables' found.";
+                return false;
+            }
+        }
+
 
         public void SetFlag(string key, bool value)
         {

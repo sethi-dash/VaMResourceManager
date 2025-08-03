@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Control\WatermarkTextBox.cs" />
     <Compile Include="Json\ArrayExtractor.cs" />
+    <Compile Include="Json\ClothingFemaleVamFile.cs" />
     <Compile Include="Json\JsonModifiedParser.cs" />
     <Compile Include="Json\JsonPrefsEditor.cs" />
     <Compile Include="Json\UserItemDto.cs" />
@@ -306,6 +307,7 @@
   <ItemGroup>
     <EmbeddedResource Include="bc1q6rynxs54wqyee6fe3wds9z6gn2nhl9ej40w84w.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Fody.6.8.2\build\Fody.targets" Condition="Exists('packages\Fody.6.8.2\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

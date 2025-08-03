@@ -1,7 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Management;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using Vrm.Cfg;
 using Vrm.Json;
 using Vrm.Refs;
@@ -21,6 +28,7 @@ namespace Vrm.Vm
         public ICommand CmdBrowseVar {get;}
         public ICommand CmdSetFavHideTag {get;}
         public ICommand CmdRemove {get;}
+        public ICommand CmdCreateItem { get; set; }
 
         private List<object> _items;
         public List<object> Items
@@ -51,6 +59,8 @@ namespace Vrm.Vm
                     cmds.Add(new VmCmdBtn("Filter to package name", CmdFilterToName));
                     cmds.Add(new VmCmdBtn("Filter to var", CmdFilterToVar));
                     cmds.Add(new VmCmdBtn("Browse var", CmdBrowseVar));
+                    if(SelectedItem.HasClothing && SelectedItem.RelativePath.Contains("Female"))
+                        cmds.Add(new VmCmdBtn("Create Custom Item", CmdCreateItem));
                 }
                 else if (SelectedItem.IsUserItem)
                 {
@@ -247,6 +257,147 @@ namespace Vrm.Vm
                 else
                     return SelectedItem != null && (SelectedItem.IsVarSelf || SelectedItem.IsUserItem);
             });
+
+            CmdCreateItem = new RelayCommand(x =>
+            {
+                try
+                {
+                    string creator = "shiny";
+                    var path = SelectedItem.RelativePath;
+                    var pathWoExt = FileHelper.ChangeExt(path, null);
+                    var presetName = FileHelper.GetOnlyFileName(pathWoExt, true);
+                    var dir = FileHelper.GetDir(path);
+
+                    bool vabFound = false;
+                    string vabEntry = "";
+                    string targetPathWoExt = "";
+                    bool isPreset = false;
+
+                    FileHelper.ProcessZip(SelectedItem.Var.Info.FullName, (entries, e) =>
+                    {
+                        if (!vabFound)
+                        {
+                            var vabs = entries.Where(x1 => FileHelper.GetExtension(x1) == Ext.Vab).ToList();
+                            var vabDict = new Dictionary<string, string>();
+                            foreach (var item in vabs)
+                            {
+                                var nameVab = FileHelper.GetOnlyFileName(item, true);
+                                var pathVab = item;
+                                vabDict.Add(nameVab, pathVab);
+                            }
+
+                            string bestMatch = vabDict.Keys
+                                .Where(c => pathWoExt.Contains(c))
+                                .OrderByDescending(c => c.Length)
+                                .FirstOrDefault();
+                            if(bestMatch != null && vabDict.TryGetValue(bestMatch, out var value))
+                                vabEntry = value;
+                            vabFound = true;
+                        }
+                        if (e.Key == pathWoExt)
+                        {
+                            isPreset = e.All(x1 => FileHelper.GetExtension(x1.FullName) != Ext.Vaj);
+
+                            var newPath = pathWoExt.Replace(SelectedItem.Creator, creator);
+                            newPath = FileHelper.PathCombine(Settings.Config.VamPath, newPath);
+                            targetPathWoExt = FileHelper.ChangeExt(newPath, null);
+
+                            return false;
+                        }
+
+                        return true;
+                    });
+
+                    vabFound = false;
+                    FileHelper.ProcessZip(SelectedItem.Var.Info.FullName, (entries, e) =>
+                    {
+                        if (isPreset)
+                        {
+                            if (e.Key == FileHelper.ChangeExt(vabEntry, null))
+                            {
+                                foreach (var item in e)
+                                {
+                                    if (FileHelper.GetExtension(item.FullName) == Ext.Vab)
+                                    {
+                                        var newPath = targetPathWoExt + Ext.Vab;
+                                        FileHelper.CreateDirectoryOfFileInNotExists(newPath);
+                                        FileHelper.SaveZipEntryToFile(item, newPath);
+                                        vabFound = true;
+                                    }
+                                }
+                            }
+
+                            if (e.Key == pathWoExt)
+                            {
+                                foreach (var item in e)
+                                {
+                                    var newPath = item.FullName.Replace(SelectedItem.Creator, creator);
+                                    newPath = FileHelper.PathCombine(Settings.Config.VamPath, newPath);
+                                    FileHelper.CreateDirectoryOfFileInNotExists(newPath);
+                                    FileHelper.SaveZipEntryToFile(item, newPath);
+                                }
+
+                                if (vabFound)
+                                    return false;
+                            }
+                        }
+                        else
+                        {
+                            if (e.Key == pathWoExt)
+                            {
+                                foreach (var item in e)
+                                {
+                                    var newPath = targetPathWoExt + FileHelper.GetExtension(item.Name);
+                                    FileHelper.CreateDirectoryOfFileInNotExists(newPath);
+                                    FileHelper.SaveZipEntryToFile(item, newPath);
+                                }
+                                return false;
+                            }
+                        }
+                        return true;
+                    });
+
+                    var vamFile = targetPathWoExt + Ext.Vam;
+                    var name = FileHelper.GetOnlyFileName(path, true);
+                    var vam = new ClothingFemaleVamFile($"{creator}:{name}", creator);
+                    FileHelper.CreateDirectoryOfFileInNotExists(vamFile);
+                    FileHelper.WriteAllText(vamFile, JsonConvert.SerializeObject(vam, Formatting.Indented));
+
+                    if (isPreset)
+                    {
+                        var vapFile = targetPathWoExt + Ext.Vap;
+                        var vabName = FileHelper.GetOnlyFileName(vabEntry, true);
+                        var json = FileHelper.FileReadAllText(vapFile);
+                        json = FileHelper.ProcessVaj(json, true, SelectedItem.Var.Name, creator, dir, vabName, presetName);
+                        var jEditor = new JsonPrefsEditor(json);
+                        jEditor.AddComponentsToRoot();
+                        jEditor.AddToStorables_ClothingPluginManager(presetName, out _);
+                        jEditor.RemoveFromRoot_setUnlistedParamsToDefault();
+                        json = jEditor.GetEditedJson();
+
+                        FileHelper.WriteAllText(targetPathWoExt + Ext.Vaj, json);
+                        FileHelper.FileDelete(vapFile);
+                    }
+                    else
+                    {
+                        var vajFileName = targetPathWoExt + Ext.Vaj;
+                        var jEditor = new JsonPrefsEditor(FileHelper.FileReadAllText(vajFileName));
+                        jEditor.AddInComponents_MVRPluginManager();
+                        jEditor.AddToStorables_ClothingPluginManager(presetName, out _);
+                        var json = jEditor.GetEditedJson();
+                        json = FileHelper.ProcessVaj(json, false, SelectedItem.Var.Name, creator, dir, "", "");
+                        FileHelper.WriteAllText(vajFileName, json);
+                    }
+
+                    TextBoxDialog.ShowDialog("Item created", vamFile);
+                }
+                catch (Exception e)
+                {
+                    TextBoxDialog.ShowDialog("Error", e.Message);
+                }
+
+
+            }, _=>SelectedItem!= null && SelectedItem.IsVar && !SelectedItem.IsVarSelf);
         }
     }
 }

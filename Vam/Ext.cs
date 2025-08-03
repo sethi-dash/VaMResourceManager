@@ -9,6 +9,8 @@ namespace Vrm.Vam
         public static string Var = ".var";
         public static HashSet<string> Morphs = new HashSet<string>{".vmb", ".vmi", ".dsf"};
         public static string Preset = ".vap";
+        public static string Vab = ".vab";
+        public static string Vap = ".vap";
         public static string Package = ".var";
         public static HashSet<string> Hair= new HashSet<string>{".vab", ".vaj", ".vam"};
         public static HashSet<string> Clothing = new HashSet<string>{".vab", ".vaj", ".vam"};

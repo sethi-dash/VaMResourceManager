@@ -880,6 +880,19 @@ namespace Vrm.Util
             return Path.GetExtension(path);
         }
 
+        public static string GetDir(string path)
+        {
+            return Path.GetDirectoryName(path);
+        }
+
+        public static string GetOnlyFileName(string path, bool woExt)
+        {
+            if(woExt)
+                return Path.GetFileNameWithoutExtension(path);
+            else
+                return Path.GetFileName(path);
+        }
+
         public static bool FileExists(string path)
         {
             return File.Exists(path);
@@ -950,6 +963,13 @@ namespace Vrm.Util
 
         public static void CreateDirectoryInNotExists(string dir)
         {
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+        }
+
+        public static void CreateDirectoryOfFileInNotExists(string file)
+        {
+            var dir = Path.GetDirectoryName(file);
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
         }
@@ -1259,6 +1279,70 @@ namespace Vrm.Util
         #endregion
 
         #endregion
+
+        public static void ProcessZip(string filename, Func<List<string>, IGrouping<string, ZipArchiveEntry>, bool> entryAction)
+        {
+            using (FileStream zipStream = File.OpenRead(filename))
+            {
+                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+                {
+                    var allEntries = archive.Entries.Select(x => x.FullName).ToList();
+                    var elGroupsDict = archive.Entries.GroupBy(x1 => FileHelper.ChangeExt(x1.FullName, null))
+                        .ToDictionary(x => x.Key);
+                    foreach (var item in elGroupsDict.Values)
+                    {
+                        if(!entryAction(allEntries, item))
+                            break;
+                    }
+                }
+            }
+        }
+
+        public static string ProcessVaj(string vajContent, bool isPreset, VarName name, string newCreator, string dir, string vabName, string presetName)
+        {
+            var json = vajContent;
+            if(isPreset)
+                json = json.Replace(@"SELF:", name.FullName + ":");
+
+            string pattern = "\"id\"\\s*:\\s*\"[^\"]+\"";
+            string patternDot = @"^(\s*""customTexture_[^""]*""\s*:\s*"")\./";
+            string replacementPrefix = $"$1{name.FullName}:/{dir}/";
+
+            var lines = json.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (Regex.IsMatch(lines[i], pattern))
+                {
+                    lines[i] = lines[i].Replace(name.Creator, newCreator);
+                    if (isPreset)
+                    {
+                        //lines[i] = lines[i].Replace(vabName, presetName);
+                        lines[i] = ReplaceFirst(lines[i], vabName, presetName);
+                    }
+                }
+
+                if(!isPreset && Regex.IsMatch(lines[i], patternDot))
+                {
+                    lines[i] = Regex.Replace(lines[i], patternDot, replacementPrefix).Replace('\\', '/');;
+                }
+            }
+
+            json = string.Join(Environment.NewLine, lines);
+            return json;
+        }
+
+        private static string ReplaceFirst(string source, string oldValue, string newValue)
+        {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(oldValue))
+                return source;
+
+            int index = source.IndexOf(oldValue, StringComparison.Ordinal);
+            if (index < 0)
+                return source;
+
+            return source.Substring(0, index) + newValue + source.Substring(index + oldValue.Length);
+        }
+
 
         #region var
 
