@@ -1298,33 +1298,57 @@ namespace Vrm.Util
             }
         }
 
-        public static string ProcessVaj(string vajContent, bool isPreset, VarName name, string newCreator, string dir, string vabName, string presetName)
+        private static string _findCustomTextureRightPart_pattern = @"""customTexture_[^""]*""\s*:\s*""([^""]+)""";
+        private static string _findFileInQuotes_pattern = @"""([^/\\"":]+?\.[a-zA-Z0-9]+)""";
+
+        public static string ProcessVaj(string vajContent, bool isPreset, VarName name, string newCreator, string vabName, string presetName, List<string> entries)
         {
             var json = vajContent;
-            if(isPreset)
-                json = json.Replace(@"SELF:", name.FullName + ":");
-
-            string pattern = "\"id\"\\s*:\\s*\"[^\"]+\"";
-            string patternDot = @"^(\s*""customTexture_[^""]*""\s*:\s*"")\./";
-            string replacementPrefix = $"$1{name.FullName}:/{dir}/";
+            string Id_pattern = "\"id\"\\s*:\\s*\"[^\"]+\"";
 
             var lines = json.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             for (int i = 0; i < lines.Length; i++)
             {
-                if (Regex.IsMatch(lines[i], pattern))
+                if (Regex.IsMatch(lines[i], Id_pattern))
                 {
                     lines[i] = lines[i].Replace(name.Creator, newCreator);
                     if (isPreset)
                     {
-                        //lines[i] = lines[i].Replace(vabName, presetName);
-                        lines[i] = ReplaceFirst(lines[i], vabName, presetName);
+                        lines[i] = ReplaceFirst(lines[i], vabName, presetName); //vabName may appear multiple times in the string
                     }
                 }
 
-                if(!isPreset && Regex.IsMatch(lines[i], patternDot))
+                var textureMatch = Regex.Match(lines[i], _findCustomTextureRightPart_pattern);
+                if (textureMatch.Success)
                 {
-                    lines[i] = Regex.Replace(lines[i], patternDot, replacementPrefix).Replace('\\', '/');;
+                    var rightPart = textureMatch.Groups[1].Value;
+                    bool ignoreTex = string.IsNullOrWhiteSpace(rightPart) ||
+                                     rightPart.Equals("NULL", StringComparison.OrdinalIgnoreCase);
+                    if (!ignoreTex)
+                    {
+                        var fileName = Path.GetFileName(rightPart);
+                        var fullTextureString = "";
+                        foreach (var e in entries)
+                        {
+                            if (Path.GetFileName(e).Equals(fileName, StringComparison.OrdinalIgnoreCase))
+                            {
+                                fullTextureString = $"{name.FullName}:/{e}";
+                                break;
+                            }
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(fullTextureString))
+                        {
+                            lines[i] = lines[i].Replace(rightPart, fullTextureString);
+                        }
+                        else
+                        {
+                            Settings.Logger.LogErr(
+                                $"{presetName}: Error converting VAP to VAJ. Failed to process texture {lines[i]}.");
+                        }
+                    }
                 }
+                lines[i] = lines[i].Replace('\\', '/');;
             }
 
             json = string.Join(Environment.NewLine, lines);

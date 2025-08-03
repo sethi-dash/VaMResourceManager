@@ -266,7 +266,6 @@ namespace Vrm.Vm
                     var path = SelectedItem.RelativePath;
                     var pathWoExt = FileHelper.ChangeExt(path, null);
                     var presetName = FileHelper.GetOnlyFileName(pathWoExt, true);
-                    var dir = FileHelper.GetDir(path);
 
                     bool vabFound = false;
                     string vabEntry = "";
@@ -368,7 +367,7 @@ namespace Vrm.Vm
                         var vapFile = targetPathWoExt + Ext.Vap;
                         var vabName = FileHelper.GetOnlyFileName(vabEntry, true);
                         var json = FileHelper.FileReadAllText(vapFile);
-                        json = FileHelper.ProcessVaj(json, true, SelectedItem.Var.Name, creator, dir, vabName, presetName);
+                        json = FileHelper.ProcessVaj(json, true, SelectedItem.Var.Name, creator, vabName, presetName, SelectedItem.Var.Entries);
                         var jEditor = new JsonPrefsEditor(json);
                         jEditor.AddComponentsToRoot();
                         jEditor.AddToStorables_ClothingPluginManager(presetName, out _);
@@ -385,7 +384,7 @@ namespace Vrm.Vm
                         jEditor.AddInComponents_MVRPluginManager();
                         jEditor.AddToStorables_ClothingPluginManager(presetName, out _);
                         var json = jEditor.GetEditedJson();
-                        json = FileHelper.ProcessVaj(json, false, SelectedItem.Var.Name, creator, dir, "", "");
+                        json = FileHelper.ProcessVaj(json, false, SelectedItem.Var.Name, creator, "", "", SelectedItem.Var.Entries);
                         FileHelper.WriteAllText(vajFileName, json);
                     }
 

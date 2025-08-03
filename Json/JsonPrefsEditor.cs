@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -36,11 +37,21 @@ namespace Vrm.Json
         public void AddInComponents_MVRPluginManager()
         {
             var components = _root["components"] as JArray;
-            var newComponent = new JObject
+            if (components == null)
+                return;
+
+            bool alreadyExists = components
+                .OfType<JObject>()
+                .Any(c => c["type"]?.ToString() == "MVRPluginManager");
+
+            if (!alreadyExists)
             {
-                ["type"] = "MVRPluginManager"
-            };
-            components.Add(newComponent);
+                var newComponent = new JObject
+                {
+                    ["type"] = "MVRPluginManager"
+                };
+                components.Add(newComponent);
+            }
         }
 
         public void RemoveFromRoot_setUnlistedParamsToDefault()
