@@ -78,7 +78,7 @@ namespace Vrm.Vm
         {
             UiHelper.InvokeAsync(() =>
             {
-                LogMessages.Add($"{DateTime.Now:o} [err]: {text}");
+                LogMessages.Add($"{DateTime.Now:yyyy-MM-ddTHH:mm:ss.fff} [err]: {text}");
                 ErrCount += 1;
             });
         }
@@ -87,7 +87,7 @@ namespace Vrm.Vm
         {
             UiHelper.InvokeAsync(() =>
             {
-                LogMessages.Add($"{DateTime.Now:o} [msg]: {text}");
+                LogMessages.Add($"{DateTime.Now:yyyy-MM-ddTHH:mm:ss.fff} [msg]: {text}");
                 MsgCount += 1;
             });
 
