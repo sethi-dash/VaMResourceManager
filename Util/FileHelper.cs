@@ -22,8 +22,9 @@ namespace Vrm.Util
     {
         public static string GetFileName_Meta_Var(string fullName, bool isArchive)
         {
+            string ext = isArchive ? Ext.MetaArchive : Ext.Meta;
             var relPath = FileHelper.NormalizePath(FileHelper.GetRelativePath(Settings.Config, fullName, isArchive));
-            var path = PathCombine(Settings.Config.CachePath, ChangeExt(relPath, "meta"));
+            var path = PathCombine(Settings.Config.CachePath, ChangeExt(relPath, ext));
             return path;
         }
 
@@ -301,6 +302,8 @@ namespace Vrm.Util
 
         public static string GetFileName_Meta_UserItem(string relativePath)
         {
+            //TODO: Implement meta file handling for user items similarly to how it's done with vars — using meta and meta_archived
+
             var path = PathCombine(Settings.Config.CachePath, ChangeExt(relativePath, "meta"));
             return path;
         }

@@ -1162,6 +1162,10 @@ namespace Vrm.Vm
 
                 if(FileHelper.FileExists(var.Info.FullName))
                     FileHelper.FileDelete(var.Info.FullName);
+
+                var metaFile = FileHelper.GetFileName_Meta_Var(var.Info.FullName, var.IsInArchive);
+                if(FileHelper.FileExists(metaFile))
+                    FileHelper.FileDelete(metaFile);
             }
             if (refFilesChanged)
                 Refs.Save();

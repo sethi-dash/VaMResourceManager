@@ -12,6 +12,7 @@ using System.Windows.Input;
 using Vrm.Cfg;
 using Vrm.Refs;
 using Vrm.Util;
+using Vrm.Vam;
 using Vrm.Window;
 
 namespace Vrm.Vm
@@ -386,7 +387,7 @@ namespace Vrm.Vm
                             if ((item.IsInArchive && !FileHelper.FileExists(FileHelper.PathCombine(Settings.Config.VamArchivePath, file)))||
                                 (!item.IsInArchive && !FileHelper.FileExists(FileHelper.PathCombine(Settings.Config.VamPath, file))))
                             {
-                                invalidRefs.Add(r.Name);
+                                invalidRefs.Add($"'{r.Name}': {file}");
                                 goto ExitLoops;
                             }
                         }
@@ -400,11 +401,22 @@ namespace Vrm.Vm
                     .Select(g => new { Key = g.Key, Count = g.Count(), Items = g.ToList() })
                     .ToList();
 
-                if(invalidRefs.Any())
-                    TextBoxDialog.ShowDialog("References validation result", 
-                        new []{$"All items of active links must be located in the 'Loaded' folder, and all items of inactive links must be in the 'Archived' folder. " +
-                               $"{Environment.NewLine}{Environment.NewLine}Corrupted references:"}
+                if (invalidRefs.Any())
+                {
+                    TextBoxDialog.ShowDialog("References validation result",
+                        new[]
+                            {
+                                $"Rule: All items of active references must be located in the 'Loaded' folder, and all items of inactive references must be in the 'Archived' folder. " +
+                                $"{Environment.NewLine}{Environment.NewLine}Corrupted references:"
+                            }
                             .Concat(invalidRefs));
+                    var scanDialog = new TextBoxDialog("Question", new[] { "Invalid references were detected. Running a scan might fix the problem.\nStart the scan?" }) { ShowOkBtn = true, ShowCancelBtn = true };
+                    var scanDiagRes = scanDialog.ShowDialog();
+                    if (scanDiagRes.HasValue && scanDiagRes.Value)
+                    {
+                        CmdApply?.Execute(null);
+                    }
+                }
                 else if (duplicates.Any())
                 {
                     string str = "";
@@ -423,6 +435,9 @@ namespace Vrm.Vm
                     }
                     TextBoxDialog.ShowDialog("Duplicated references:", str);
                 }
+                //TODO:
+                //else if(...)All references are checked, and there's at least one item in 'Loaded' that's not present in the references.
+                //ShowDialog(Some items will be moved in Archive);
                 else
                     TextBoxDialog.ShowDialog("References validation", "All OK");
             }, x=> Items.Any());
@@ -820,33 +835,51 @@ namespace Vrm.Vm
 
                 foreach(var r in FindReferencedVar(kvp.Value))
                     r.IsInArchive = false;
+
+                var metaFile = FileHelper.GetFileName_Meta_Var(sourcePath, true);
+                if (FileHelper.FileExists(metaFile))
+                {
+                    var @new = FileHelper.ChangeExt(metaFile, Ext.Meta);
+                    if(!FileHelper.TryMoveFile(metaFile, @new, out var err2))
+                        errors.Enqueue(err2);
+                }
             }
 
             #endregion
             #region -> archive
 
-            if (!moveAll2Loaded)
+            if (moveAll2Loaded)
             {
-                foreach (var item in move2archive.ResourcesRelPath)
+                move2archive.ResourcesRelPath.Clear();
+                move2archive.VarsName.Clear();
+            }
+            foreach (var item in move2archive.ResourcesRelPath)
+            {
+                var sourcePath = FileHelper.PathCombine(vamPath, item);
+                var destPath = FileHelper.PathCombine(archivePath, item);
+                if (!FileHelper.TryMoveFile(sourcePath, destPath, out var err))
+                    errors.Enqueue(err);
+
+                foreach (var r in FindReferencedResource(item))
+                    r.IsInArchive = true;
+            }
+
+            foreach (var kvp in move2archive.VarsName)
+            {
+                var sourcePath = FileHelper.PathCombine(vamPath, kvp.Value);
+                var destPath = FileHelper.PathCombine(archivePath, kvp.Value);
+                if (!FileHelper.TryMoveFile(sourcePath, destPath, out var err))
+                    errors.Enqueue(err);
+
+                foreach (var r in FindReferencedVar(kvp.Value))
+                    r.IsInArchive = true;
+
+                var metaFile = FileHelper.GetFileName_Meta_Var(sourcePath, false);
+                if (FileHelper.FileExists(metaFile))
                 {
-                    var sourcePath = FileHelper.PathCombine(vamPath, item);
-                    var destPath = FileHelper.PathCombine(archivePath, item);
-                    if (!FileHelper.TryMoveFile(sourcePath, destPath, out var err))
-                        errors.Enqueue(err);
-
-                    foreach (var r in FindReferencedResource(item))
-                        r.IsInArchive = true;
-                }
-
-                foreach (var kvp in move2archive.VarsName)
-                {
-                    var sourcePath = FileHelper.PathCombine(vamPath, kvp.Value);
-                    var destPath = FileHelper.PathCombine(archivePath, kvp.Value);
-                    if (!FileHelper.TryMoveFile(sourcePath, destPath, out var err))
-                        errors.Enqueue(err);
-
-                    foreach (var r in FindReferencedVar(kvp.Value))
-                        r.IsInArchive = true;
+                    var @new = FileHelper.ChangeExt(metaFile, Ext.MetaArchive);
+                    if(!FileHelper.TryMoveFile(metaFile, @new, out var err2))
+                        errors.Enqueue(err2);
                 }
             }
 

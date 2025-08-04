@@ -33,6 +33,8 @@ namespace Vrm.Vam
         public static string Vam = ".vam";
         public static string Vmi = ".vmi";
         public static string UiAssistCfg = ".uiap";
+        public static string Meta = ".meta";
+        public static string MetaArchive = ".meta_archive";
         public static HashSet<string> Music = new HashSet<string>{".ogg", ".wav", ".mp3"};
         public static HashSet<string> Textures = new HashSet<string>{".jpg", ".tif", ".png", ".bmp", ".tiff"};
 
