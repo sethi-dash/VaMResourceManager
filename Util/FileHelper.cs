@@ -1302,7 +1302,7 @@ namespace Vrm.Util
         }
 
         private static string _findCustomTextureRightPart_pattern = @"""customTexture_[^""]*""\s*:\s*""([^""]+)""";
-        private static string _findFileInQuotes_pattern = @"""([^/\\"":]+?\.[a-zA-Z0-9]+)""";
+        //private static string _findFileInQuotes_pattern = @"""([^/\\"":]+?\.[a-zA-Z0-9]+)""";
 
         public static string ProcessVaj(string vajContent, bool isPreset, VarName name, string newCreator, string vabName, string presetName, List<string> entries)
         {
