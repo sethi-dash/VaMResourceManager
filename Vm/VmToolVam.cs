@@ -430,7 +430,7 @@ namespace Vrm.Vm
                         foreach (var item in items)
                             item.WriteAsDto();
                     });
-                    Settings.Logger.LogMsg($"Dependencies resolved for: {stopwatch.ElapsedMilliseconds - markBeforeResolveDeps} ms");
+                    Settings.Logger.LogMsg($"Dependency resolve time: {stopwatch.ElapsedMilliseconds - markBeforeResolveDeps} ms");
 
                     VmMain.DateStartModified = rdArchive.StartModified < rdLoaded.StartModified ? rdArchive.StartModified : rdLoaded.StartModified;
                     VmMain.DateEndModified = rdArchive.EndModified > rdLoaded.EndModified ? rdArchive.EndModified : rdLoaded.EndModified;
