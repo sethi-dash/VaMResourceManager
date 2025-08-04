@@ -27,6 +27,15 @@ namespace Vrm.Window
             }
         }
 
+        public bool ShowCancelBtn
+        {
+            get => btn_cancel.Visibility == Visibility.Visible;
+            set
+            {
+                btn_cancel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public bool ShowSystemBtns
         {
             get => WindowStyle != WindowStyle.None;
@@ -44,6 +53,12 @@ namespace Vrm.Window
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
+            this.Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
             this.Close();
         }
 
