@@ -262,7 +262,7 @@ namespace Vrm.Vm
             {
                 try
                 {
-                    string creator = "shiny";
+                    string creator = Settings.Config.CreatorName;
                     var path = SelectedItem.RelativePath;
                     var pathWoExt = FileHelper.ChangeExt(path, null);
                     var presetName = FileHelper.GetOnlyFileName(pathWoExt, true);

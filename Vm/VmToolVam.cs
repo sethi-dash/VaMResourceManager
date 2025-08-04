@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -159,6 +160,18 @@ namespace Vrm.Vm
             set => SetField(ref _runVamViaShortcutIsEnabled, value);
         }
 
+        private string _creatorName= Settings.Config.CreatorName;
+        public string CreatorName
+        {
+            get => _creatorName;
+            set
+            {
+                if (SetField(ref _creatorName, value))
+                {
+                }
+            }
+        }
+
         public VmStatTable StatTable { get; }
 
         private int _imagesInCache;
@@ -247,6 +260,7 @@ namespace Vrm.Vm
         public ICommand CmdSetVamShortcut {get;}
         public ICommand CmdRunVamShortcut {get;}
         public ICommand CmdRemoveOldVarVersions {get;}
+        public ICommand CmdSetCreatorName { get; }
 
         private VmMain VmMain => (VmMain)ParentTab;
         private VmToolVar VarExplorer => VmMain.ToolVar;
@@ -707,6 +721,15 @@ namespace Vrm.Vm
                     TextBoxDialog.ShowDialog($"Cleanup result", $"{toRemove.Count} file(s) were moved");
                 }
             });
+
+            CmdSetCreatorName = new RelayCommand(x =>
+            {
+                CreatorName =  Regex.Replace(CreatorName, @"[^\w]", "");
+                int maxLength = 60;
+                CreatorName = CreatorName.Length > maxLength ? CreatorName.Substring(0, maxLength) : CreatorName;
+                TextBoxDialog.ShowDialog("Information", $"The creator name '{CreatorName}' will now be used when creating custom items.");
+                Settings.Config.CreatorName = CreatorName;
+            }, _ => !string.IsNullOrWhiteSpace(CreatorName));
 
             StatTable = new VmStatTable() {IsVisible = false};
         }

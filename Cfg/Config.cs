@@ -14,6 +14,7 @@ namespace Vrm.Cfg
         public string ReferenceFolder {get;set;} = "references";
         public string CachePath {get;set;} = "cache";
         public string ShortcutVam {get;set;} = "";
+        public string CreatorName { get; set; } = "CREATOR_NAME";
         public bool RunVamViaShortcut {get;set;}
         public bool IsWindowTopmost {get;set;}
         public bool AutoScan { get; set; } = false;

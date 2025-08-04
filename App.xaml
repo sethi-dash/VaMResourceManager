@@ -799,6 +799,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -858,9 +859,19 @@
                 <TextBlock Margin="2" Grid.Row="5" Grid.Column="0" Text="User folders:"/>
                 <ContentControl Margin="2" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding UserFolders}" Height="120"/>
 
-                <TextBlock Margin="2" Grid.Row="6" Grid.Column="0" Text="Custom VaM`s shortcut:"/>
-                <TextBox Margin="2" Grid.Row="6" Grid.Column="1" Text="{Binding ShortcutVam}" IsReadOnly="True"/>
+                <TextBlock Margin="2" Grid.Row="6" Grid.Column="0" Text="Creator for custom items:"/>
+                <TextBox Margin="2" Grid.Row="6" Grid.Column="1" Text="{Binding CreatorName, UpdateSourceTrigger=PropertyChanged}"/>
                 <Grid Margin="2" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Margin="0 0 0 0" Content="Save" Command="{Binding CmdSetCreatorName}" Grid.ColumnSpan="2"/>
+                </Grid>
+
+                <TextBlock Margin="2" Grid.Row="7" Grid.Column="0" Text="Custom VaM`s shortcut:"/>
+                <TextBox Margin="2" Grid.Row="7" Grid.Column="1" Text="{Binding ShortcutVam}" IsReadOnly="True"/>
+                <Grid Margin="2" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition Width="*"/>
@@ -868,7 +879,7 @@
                     <Button Content="..." Command="{Binding CmdSetVamShortcut}" ToolTip="Change" Grid.ColumnSpan="2"/>
                 </Grid>
 
-                <StackPanel Margin="2" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical">
+                <StackPanel Margin="2" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical">
                     <CheckBox Margin="0 2 2 2" IsChecked="{Binding AutoScan}" Content="Run scan on application start"/>
                     <CheckBox Margin="0 2 2 2" IsChecked="{Binding EnableFilterHideFavTagFeature}" Content="Enables filtering of items by Hide, Fav, and Tags (slows down the Scan)" ToolTip="Does not affect the ability to modify Hide, Fav, or Tags. To apply the effect, a re-Scan must be performed."/>
                     <CheckBox Visibility="Collapsed" Margin="0 2 2 2" IsChecked="{Binding UseMaxAvailableVarVersion}" Content="Use the latest available version of the var during the sync process"/>
@@ -876,7 +887,7 @@
                     <CheckBox Margin="0 2 2 2" IsChecked="{Binding IsWindowTopmost}" Content="Main Window: Always on Top"/>
                 </StackPanel>
 
-                <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3">
                     <StackPanel Orientation="Vertical" VerticalAlignment="Top" Visibility="{Binding StatTable.IsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="Statistics" FontWeight="SemiBold" FontSize="13" Margin="0 30 0 4"/>
                         <ContentControl Content="{Binding StatTable}"/>
@@ -1094,9 +1105,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <control:WatermarkTextBox Grid.Row="0" Grid.Column="1" Text="{Binding Text}" TextWrapping="Wrap" AcceptsReturn="True"
+                <control:WatermarkTextBox Grid.Row="0" Text="{Binding Text}" TextWrapping="Wrap" AcceptsReturn="True"
                                           Watermark="Enter user folders here&#x0a;If you have resources located outside the default VaM folders, specify them here to allow the VaM Resource Manager to process them. A space, comma, semicolon, or similar character can be used as a separator. User folders must be specified as relative paths to the VaM base path and must already exist."/>
-                <Button Margin="0 4 0 0" Grid.Row="1" Grid.Column="1" Content="Save" Command="{Binding CmdSave}" HorizontalAlignment="Right" Width="100"/>
+                <Button Margin="0 4 0 0" Grid.Row="1" Content="Save" Command="{Binding CmdSave}" HorizontalAlignment="Right" Width="62"/>
 
             </Grid>
         </DataTemplate>
