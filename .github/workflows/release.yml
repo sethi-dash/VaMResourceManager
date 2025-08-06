@@ -72,7 +72,7 @@ jobs:
         body: 'Automatic release'
         files: |
           VaMResourceManager.exe
-        # VaMResourceManager.zip 
+          VaMResourceManager.zip 
 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
