@@ -64,6 +64,13 @@ jobs:
     - name: Copy EXE to root for release
       run: copy .\bin\Release\VaMResourceManager.exe .\
 
+    - name: RAR from build output
+      shell: pwsh
+      run: |
+         Invoke-WebRequest -Uri "https://www.7-zip.org/a/7z2408-extra.7z" -OutFile extra.7z
+         7z x extra.7z -o7zip-extra
+          .\7zip-extra\7z.exe a -m0=rar VaMResourceManager.rar .\out\*
+
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
       with:
