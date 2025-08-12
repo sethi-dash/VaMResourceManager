@@ -69,7 +69,7 @@ jobs:
       run: |
          Invoke-WebRequest -Uri "https://www.7-zip.org/a/7z2408-extra.7z" -OutFile extra.7z
          7z x extra.7z -o7zip-extra
-          .\7zip-extra\7z.exe a -m0=rar VaMResourceManager.rar .\out\*
+         & ".\7zip-extra\7z.exe" a -m0=rar VaMResourceManager.rar .\out\*
 
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
@@ -79,7 +79,8 @@ jobs:
         body: 'Automatic release'
         files: |
           VaMResourceManager.exe
-          VaMResourceManager.zip 
+          VaMResourceManager.zip
+          VaMResourceManager.rar
 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
