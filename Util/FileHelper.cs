@@ -1279,6 +1279,30 @@ namespace Vrm.Util
                 return Path.Combine(cfg.VamPath, relativePath);
         }
 
+        public static string GetRelativeAfterFolder(string path, string folderName)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+            if (string.IsNullOrEmpty(folderName))
+                throw new ArgumentNullException(nameof(folderName));
+
+            string fullPath = Path.GetFullPath(path);
+            string[] parts = fullPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (string.Equals(parts[i], folderName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (i + 1 < parts.Length)
+                        return string.Join(Path.DirectorySeparatorChar.ToString(), parts, i + 1, parts.Length - (i + 1));
+                    else
+                        return string.Empty;
+                }
+            }
+
+            return string.Empty;
+        }
+
         #endregion
 
         #endregion

@@ -29,6 +29,7 @@ namespace Vrm.Vm
         public ICommand CmdSetFavHideTag {get;}
         public ICommand CmdRemove {get;}
         public ICommand CmdCreateItem { get; set; }
+        public ICommand CmdCopyPoseAddressString { get; set; }
 
         private List<object> _items;
         public List<object> Items
@@ -70,6 +71,11 @@ namespace Vrm.Vm
                 if (mainVm.SelectionMode || (!SelectedItem.IsVarSelf && (SelectedItem.IsSceneOrSubscene || SelectedItem.IsClothingOrHair)))
                 {
                     cmds.Add(new VmCmdBtn("Change fav/hide/tag..", CmdSetFavHideTag));
+                }
+
+                if (SelectedItem.ElementInfo.Type == FolderType.PresetPose)
+                {
+                    cmds.Add(new VmCmdBtn("Copy pose address", CmdCopyPoseAddressString));
                 }
             }
 
@@ -397,6 +403,24 @@ namespace Vrm.Vm
 
 
             }, _=>SelectedItem!= null && SelectedItem.IsVar && !SelectedItem.IsVarSelf);
+
+            CmdCopyPoseAddressString = new RelayCommand(_ =>
+            {
+                var path = FileHelper.GetRelativeAfterFolder(SelectedItem.RelativePath, "Pose");
+                path = path.Replace('\\', '/');
+                path = FileHelper.ChangeExt(path, null);
+                path = path.Replace("Preset_", "");
+
+                if (SelectedItem.IsVar)
+                {
+                    var str = $"{SelectedItem.Creator}.{SelectedItem.Var.Name.Name}.{SelectedItem.Var.Name.Version}:{path}";
+                    Clipboard.SetText(str);
+                }
+                else
+                {
+                    Clipboard.SetText(path);
+                }
+            }, _ => SelectedItem != null);
         }
     }
 }
