@@ -1000,6 +1000,17 @@ namespace Vrm.Vm
             FileHelper.ProcessParallel(dir, "*.var", ct, x =>
             {
                 var v = FileHelper.GetOrAddVar(x, isArchive, messages);
+
+                if (!Settings.Config.EnableHideFavTagFeature)
+                {
+                    var p1fn = FileHelper.GetPrefsFileName_NotesPreloadMorphs(v.Name);
+                    if (FileHelper.FileExists(p1fn))
+                    {
+                        var json = FileHelper.FileReadAllText(p1fn);
+                        v.IsPreloadMorhpsDisabledByPrefs = FileHelper.GetPreloadMorphs(json) == false;
+                    }
+                }
+
                 vars.Add(v);
             }, errors);
         }
