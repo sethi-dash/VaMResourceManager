@@ -201,7 +201,7 @@ namespace Vrm.Window
             var item1 = new MenuItem { Header = "About" };
             item1.Click += (s, args) => TextBoxDialog.ShowDialog("About", 
                 $"VaM Resource Manager\n" +
-                $"Version 1.0\n" +
+                $"Version {Settings.Version}\n" +
                 $"Open Source: https://github.com/sethi-dash/VamResourceManager\n"+
                 $"License: GNU General Public License v3.0\n" +
                 $"Author: sethi_dash@outlook.com");

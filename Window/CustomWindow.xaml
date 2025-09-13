@@ -4,6 +4,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:Vrm.Vm"
         xmlns:control="clr-namespace:Vrm.Control"
+        xmlns:local="clr-namespace:Vrm"
         Title="{Binding Title}"
         Height="800" Width="1200"
         WindowStyle="None"
@@ -108,6 +109,7 @@
 
                 <!-- Window buttons -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 6 0">
+                    <TextBlock Text="{Binding Source={x:Static local:Settings.Version}, StringFormat='v{0}'}" VerticalAlignment="Center" Margin="0 0 2 0"/>
                     <Button Width="20" Height="20" Content="?" Click="About_Click" Background="Transparent"/>
                     <Button Width="20" Height="20" Content="—" Click="Minimize_Click" Background="Transparent" Margin="-1 0 0 0"/>
                     <Button Width="20" Height="20" Content="▭" Click="Maximize_Click" Background="Transparent" Margin="-1 0 0 0"/>

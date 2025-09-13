@@ -12,6 +12,7 @@ namespace Vrm
 {
     public static class Settings
     {
+        public static Version Version { get; } = new Version(1, 0, 1);
         public static Config Config { get; set; } = new Config();
         public static VmToolLogger Logger {get;} = new VmToolLogger();
         public static string ExePath => AppDomain.CurrentDomain.BaseDirectory;
